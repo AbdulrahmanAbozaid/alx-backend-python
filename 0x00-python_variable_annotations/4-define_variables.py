@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Module for task 4
+"""
+
 
 a: int = 1
 pi: float = 3.14

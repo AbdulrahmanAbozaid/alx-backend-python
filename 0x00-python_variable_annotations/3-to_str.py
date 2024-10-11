@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
+"""
+Module for task 3
+"""
+
 
 def to_str(n: float) -> str:
-    """Convert a float to its string representation."""
+    """
+    Function that takes a float and returns its string representation.
+    """
     return str(n)

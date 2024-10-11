@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
+"""
+Module for task 0
+"""
+
 
 def add(a: float, b: float) -> float:
-    """Add two floats and return the sum."""
+    """
+    Function that takes two floats and returns their sum.
+    """
     return a + b
