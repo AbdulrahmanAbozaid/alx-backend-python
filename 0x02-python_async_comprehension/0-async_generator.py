@@ -4,7 +4,7 @@ Asynchronously generates random float numbers
 """
 import asyncio
 import random
-from typing import AsyncGenerator, AsyncIterator
+from typing import AsyncIterator
 
 
 async def async_generator() -> AsyncIterator[float]:
