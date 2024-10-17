@@ -4,10 +4,10 @@ Asynchronously generates random float numbers
 """
 import asyncio
 import random
-from typing import AsyncIterator
+from typing import Any, AsyncGenerator
 
 
-async def async_generator() -> AsyncIterator[float]:
+async def async_generator() -> AsyncGenerator[float, Any, Any]:
     """
     Asynchronously generates random float numbers between 0 and 10.
     The coroutine loops 10 times, each time asynchronously waiting
