@@ -23,3 +23,16 @@ class TestAccessNestedMap(TestCase):
     ) -> None:
         """test the inps"""
         self.assertEqual(access_nested_map(nested_map, path), expected)
+
+    @parameterized.expand(
+        [
+            ({}, ("a",), "a"),
+            ({"a": 1}, ("a", "b"), "b"),
+        ]
+    )
+    def test_access_nested_map_exception(
+        self, nested_map: Mapping, path: Sequence, expected: str
+    ):
+        """test with exception"""
+        with self.assertRaisesRegex(KeyError, expected):
+            access_nested_map(nested_map, path)
