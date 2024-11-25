@@ -80,7 +80,7 @@ class TestIntegrationGithubOrgClient(TestCase):
     """Test Integration of public_repos"""
 
     @classmethod
-    def setUpClass(cls) -> None:
+    def setUpClass(cls):
         cls.get_patcher = patch("requests.get")
         cls.mock_get = cls.get_patcher.start()
 
@@ -97,7 +97,7 @@ class TestIntegrationGithubOrgClient(TestCase):
         cls.mock_get.side_effect = mocked_requests_get
 
     @classmethod
-    def tearDownClass(cls) -> None:
+    def tearDownClass(cls):
         cls.get_patcher.stop()
 
     def test_public_repos(self):
