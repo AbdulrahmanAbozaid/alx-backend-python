@@ -43,10 +43,24 @@ class TestGithubOrgClient(TestCase):
             {"name": 1},
             {"name": 1},
         ]
-        with patch("client.GithubOrgClient._public_repos_url",
-                   new_callable=PropertyMock) as mock_repo:
+        with patch(
+            "client.GithubOrgClient._public_repos_url",
+            new_callable=PropertyMock
+        ) as mock_repo:
             mock_repo.return_value = 42
             git_org = client.GithubOrgClient("google")
             self.assertSequenceEqual(git_org.public_repos(), [1, 1, 1])
             mock_json.assert_called_once()
             mock_repo.assert_called_once()
+
+    @parameterized.expand(
+        [
+            ({"license": {"key": "my_license"}}, "my_license", True),
+            ({"license": {"key": "other_license"}}, "my_license", False),
+        ]
+    )
+    def test_has_license(self, repo, licence_key, expected):
+        """Test the has licence func"""
+        self.assertEqual(
+            client.GithubOrgClient.has_license(repo, licence_key), expected
+        )
