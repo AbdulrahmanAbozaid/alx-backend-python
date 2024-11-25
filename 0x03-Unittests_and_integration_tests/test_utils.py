@@ -4,8 +4,10 @@ Testing the utils Module functions
 """
 from typing import Any, Mapping, Sequence
 from unittest import TestCase
+from unittest.mock import Mock, patch
 from parameterized import parameterized
 from utils import access_nested_map
+import utils
 
 
 class TestAccessNestedMap(TestCase):
@@ -36,3 +38,21 @@ class TestAccessNestedMap(TestCase):
         """test with exception"""
         with self.assertRaisesRegex(KeyError, expected):
             access_nested_map(nested_map, path)
+
+
+class TestGetJson(TestCase):
+    """Test get JSON func"""
+
+    @parameterized.expand(
+        [
+            ("http://example.com", {"payload": True}),
+            ("http://holberton.io", {"payload": False}),
+        ]
+    )
+    @patch("utils.get_json", new_callable=Mock)
+    def test_get_json(self, url: str,
+                      test_payload: dict, mock_api: Mock) -> None:
+        """Test get json api"""
+        mock_api.json.return_value = test_payload
+        self.assertEqual(utils.get_json.json(url), test_payload)
+        mock_api.json.assert_called_once_with(url)
