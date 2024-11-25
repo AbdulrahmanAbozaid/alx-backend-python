@@ -2,9 +2,10 @@
 """
 Test the client Module
 """
-from typing import Any
 import client
+from fixtures import TEST_PAYLOAD
 from parameterized import parameterized
+from typing import Any
 from unittest import TestCase
 from unittest.mock import PropertyMock, patch, Mock
 
@@ -33,3 +34,19 @@ class TestGithubOrgClient(TestCase):
             mock_org.return_value = {"repos_url": 42}
             git_org = client.GithubOrgClient("google")
             self.assertEqual(git_org._public_repos_url, 42)
+
+    @patch("client.get_json", new_callable=Mock)
+    def test_public_repos(self, mock_json):
+        """Test the PublicRepos method"""
+        mock_json.return_value = [
+            {"name": 1},
+            {"name": 1},
+            {"name": 1},
+        ]
+        with patch("client.GithubOrgClient._public_repos_url",
+                   new_callable=PropertyMock) as mock_repo:
+            mock_repo.return_value = 42
+            git_org = client.GithubOrgClient("google")
+            self.assertSequenceEqual(git_org.public_repos(), [1, 1, 1])
+            mock_json.assert_called_once()
+            mock_repo.assert_called_once()
