@@ -96,6 +96,10 @@ class TestIntegrationGithubOrgClient(TestCase):
 
         cls.mock_get.side_effect = mocked_requests_get
 
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.get_patcher.stop()
+
     def test_public_repos(self):
         """Test the PublicRepos method"""
         git_org = client.GithubOrgClient("google")
@@ -107,7 +111,3 @@ class TestIntegrationGithubOrgClient(TestCase):
         self.assertSequenceEqual(
             git_org.public_repos(license="apache-2.0"), self.apache2_repos
         )
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        cls.get_patcher.stop()
