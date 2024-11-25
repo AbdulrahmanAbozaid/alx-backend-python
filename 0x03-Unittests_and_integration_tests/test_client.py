@@ -8,7 +8,6 @@ from parameterized import parameterized, parameterized_class
 from typing import Any
 from unittest import TestCase
 from unittest.mock import PropertyMock, patch, Mock
-import utils
 
 
 class TestGithubOrgClient(TestCase):
@@ -85,18 +84,17 @@ class TestIntegrationGithubOrgClient(TestCase):
         cls.get_patcher = patch("requests.get")
         cls.mock_get = cls.get_patcher.start()
 
-        cls.mock_get.side_effect = cls.mocked_requests_get
+        def mocked_requests_get(url: str):
+            """Mock for requests.get().json() behavior based on URL."""
+            if "google/" not in url:
+                return type("MockResponse", (object,),
+                            {"json": lambda: cls.org_payload})
+            elif "repos" in url:
+                return type("MockResponse", (object,),
+                            {"json": lambda: cls.repos_payload})
+            return None
 
-    @classmethod
-    def mocked_requests_get(cls, url):
-        """Mock for requests.get().json() behavior based on URL."""
-        if "google/" not in url:
-            return type("MockResponse", (object,),
-                        {"json": lambda: cls.org_payload})
-        elif "repos" in url:
-            return type("MockResponse", (object,),
-                        {"json": lambda: cls.repos_payload})
-        return None
+        cls.mock_get.side_effect = mocked_requests_get
 
     def test_public_repos(self):
         """Test the PublicRepos method"""
