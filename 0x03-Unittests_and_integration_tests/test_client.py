@@ -81,6 +81,7 @@ class TestIntegrationGithubOrgClient(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """Setting thing up"""
         cls.get_patcher = patch("requests.get")
         cls.mock_get = cls.get_patcher.start()
 
@@ -98,4 +99,17 @@ class TestIntegrationGithubOrgClient(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        """Tearing Down"""
         cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """Test the PublicRepos method"""
+        git_org = client.GithubOrgClient("google")
+        self.assertSequenceEqual(git_org.public_repos(), self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        """Test the PublicRepos method"""
+        git_org = client.GithubOrgClient("google")
+        self.assertSequenceEqual(
+            git_org.public_repos(license="apache-2.0"), self.apache2_repos
+        )
